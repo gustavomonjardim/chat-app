@@ -1,15 +1,23 @@
-import React from 'react'
+import React from 'react';
 
-import { Container, Avatar, Content, Header, Author, Date, Text } from './styles';
+import {
+  Container,
+  Avatar,
+  Content,
+  Header,
+  Author,
+  Date,
+  Text,
+} from './styles';
 
 interface Props {
   text: string;
 }
 
-const Message = ({ text } : Props ) => {
+const Message = ({ text }: Props) => {
   return (
     <Container>
-      <Avatar/>
+      <Avatar />
       <Content>
         <Header>
           <Author>Gustavo Monjardim</Author>
@@ -18,7 +26,7 @@ const Message = ({ text } : Props ) => {
         <Text>{text}</Text>
       </Content>
     </Container>
-  )
-}
+  );
+};
 
 export default Message;

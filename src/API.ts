@@ -128,6 +128,12 @@ export type ModelMessageFilterInput = {
   not?: ModelMessageFilterInput | null,
 };
 
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
 export type CreateChatMutationVariables = {
   input: CreateChatInput,
   condition?: ModelChatConditionInput | null,
@@ -335,6 +341,53 @@ export type ListMessagesQueryVariables = {
 
 export type ListMessagesQuery = {
   listMessages:  {
+    __typename: "ModelMessageConnection",
+    items:  Array< {
+      __typename: "Message",
+      id: string,
+      content: string,
+      owner: string,
+      chatID: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
+    nextToken: string | null,
+  } | null,
+};
+
+export type ChatsByNameQueryVariables = {
+  name?: string | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelChatFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ChatsByNameQuery = {
+  chatsByName:  {
+    __typename: "ModelChatConnection",
+    items:  Array< {
+      __typename: "Chat",
+      id: string,
+      name: string,
+      description: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
+    nextToken: string | null,
+  } | null,
+};
+
+export type MessagesByChatQueryVariables = {
+  chatID?: string | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelMessageFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type MessagesByChatQuery = {
+  messagesByChat:  {
     __typename: "ModelMessageConnection",
     items:  Array< {
       __typename: "Message",

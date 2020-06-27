@@ -1,11 +1,11 @@
-type Chat @model {
+type Chat @model @key(name: "byName", fields: ["name"], queryField: "chatsByName")  {
   id: ID!
   name: String!
   description: String!
   messages: [Message] @connection(keyName: "byChat", fields: ["id"])
 }
 
-type Message @model @key(name: "byChat", fields: ["chatID"]) {
+type Message @model @key(name: "byChat", fields: ["chatID"], queryField: "messagesByChat") {
   id: ID!
   content: String!
   owner: String!

@@ -33,7 +33,7 @@ export const ChatLink = styled.a`
   border-radius: 6px;
   margin: 8px 0;
   cursor: pointer;
-  transition: all .2s;
+  transition: all 0.2s;
 
   &.selected {
     background-color: #c24038;
@@ -56,6 +56,6 @@ export const ChatLink = styled.a`
     background-color: rgba(216, 225, 243, 0.1);
     opacity: 1;
   }
-`
+`;
 
 export const ChatItem = styled.li``;

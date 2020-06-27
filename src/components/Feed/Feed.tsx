@@ -1,6 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import { API, graphqlOperation } from 'aws-amplify';
+import React, { useState, useRef, useEffect } from 'react';
 
-import Message from "../Message";
+import { chatsByName } from '../../graphql/queries';
+import Message from '../Message';
 
 import {
   Container,
@@ -9,32 +11,39 @@ import {
   Description,
   Messages,
   Input,
-} from "./styles";
+} from './styles';
 
 interface Props {
   currentChat: string;
 }
 
 const Feed: React.FC<Props> = ({ currentChat }) => {
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<string[]>([
-    "teste 1",
-    "teste 2",
-    "teste 2",
-    "teste 2",
-    "teste 2",
-    "teste 2",
-    "teste 2",
-    "teste 2",
-    "teste 2",
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-  ]);
+  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState<
+    { content: string; owner: string }[]
+  >([]);
   const messagesRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    async function getMessages() {
+      const { data }: any = await API.graphql(
+        graphqlOperation(chatsByName, { name: currentChat })
+      );
+
+      const chat = data.chatsByName.items[0];
+
+      setMessages(chat.messages.items);
+
+      console.log(chat);
+    }
+    setMessages([]);
+    getMessages();
+  }, [currentChat]);
+
   const submit = ({ key }: React.KeyboardEvent<HTMLInputElement>) => {
-    if (key === "Enter") {
-      setMessages([...messages, message]);
-      setMessage("");
+    if (key === 'Enter') {
+      setMessages([...messages, { content: message, owner: 'Gustavo' }]);
+      setMessage('');
     }
   };
 
@@ -52,7 +61,7 @@ const Feed: React.FC<Props> = ({ currentChat }) => {
       </Header>
       <Messages ref={messagesRef}>
         {messages.map((message) => (
-          <Message key={message} text={message} />
+          <Message key={message.content} text={message.content} />
         ))}
       </Messages>
       <Input

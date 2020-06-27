@@ -1,15 +1,16 @@
+import { withAuthenticator } from '@aws-amplify/ui-react';
 import React from 'react';
-import './App.css';
-import GlobalStyles from './styles/global';
+
 import Chat from './components/Chat';
+import GlobalStyles from './styles/global';
 
 function App() {
   return (
     <>
-    <GlobalStyles/>
-    <Chat/>
+      <GlobalStyles />
+      <Chat />
     </>
   );
 }
 
-export default App;
+export default withAuthenticator(App);

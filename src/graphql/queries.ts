@@ -26,9 +26,6 @@ export const listChats = /* GraphQL */ `
       items {
         id
         name
-        description
-        createdAt
-        updatedAt
       }
       nextToken
     }
@@ -60,6 +57,62 @@ export const listMessages = /* GraphQL */ `
     $nextToken: String
   ) {
     listMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        content
+        owner
+        chatID
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const chatsByName = /* GraphQL */ `
+  query ChatsByName(
+    $name: String
+    $sortDirection: ModelSortDirection
+    $filter: ModelChatFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    chatsByName(
+      name: $name
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        messages {
+          items {
+            content
+            owner
+          }
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const messagesByChat = /* GraphQL */ `
+  query MessagesByChat(
+    $chatID: ID
+    $sortDirection: ModelSortDirection
+    $filter: ModelMessageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    messagesByChat(
+      chatID: $chatID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
       items {
         id
         content

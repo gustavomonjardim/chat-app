@@ -8,7 +8,6 @@ export const Container = styled.article`
   max-width: 600px;
 `;
 
-
 export const Avatar = styled.div`
   flex-shrink: 0;
   width: 45px;
