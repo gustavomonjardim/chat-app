@@ -1,17 +1,37 @@
-import React from 'react'
+import React from "react";
 
-import { Container, ChatList, ChatItem } from './styles';
+import { Container, ChatList, ChatItem, ChatLink } from "./styles";
 
-const Menu = () => {
+interface Props {
+  currentChat: string;
+  updateChat: (chat : string) => void;
+}
+
+const chats = [
+  'react',
+  'typescript',
+  'graphql',
+  'amplify'
+]
+
+const Menu : React.FC<Props> = ({ currentChat, updateChat}) => {
   return (
     <Container>
       <ChatList>
-        <ChatItem># react</ChatItem>
-        <ChatItem># typescript</ChatItem>
-        <ChatItem># graphql</ChatItem>
+        {chats.map(chat => (
+          <ChatItem key={chat} >
+            <ChatLink 
+              onClick={() => updateChat(chat)} 
+              className={currentChat === chat ? 'selected' : ''}
+              tabIndex={currentChat === chat ? -1 : 0}
+              >
+                {`# ${chat}`}
+            </ChatLink>
+          </ChatItem>
+        ))}
       </ChatList>
     </Container>
-  )
-}
+  );
+};
 
 export default Menu;

@@ -29,14 +29,17 @@ export const Author = styled.span`
 `;
 
 export const Header = styled.div`
+  display: flex;
+  align-items: baseline;
   margin-bottom: 6px;
 `;
 
 export const Date = styled.span`
   font-size: 10px;
   color: rgba(255, 255, 255, 0.6);
-  margin-left: 8px;
+  margin-left: 12px;
 `;
 export const Text = styled.span`
+  font-size: 14px;
   color: var(--text-color);
 `;

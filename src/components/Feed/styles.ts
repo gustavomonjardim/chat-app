@@ -45,6 +45,7 @@ export const Messages = styled.main`
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #181A1F;
+  border-radius: 2px;
 }
 
 /* Handle on hover */
@@ -58,7 +59,18 @@ export const Input = styled.input`
   font-size: 16px;
   color: var(--text-color);
   background-color: #3E4451;
+  border: 1px solid transparent;
   margin: 24px;
   padding: 8px 16px;
   border-radius: 8px;
+
+  ::placeholder {
+    color: var(--text-color);
+    opacity: 0.6;
+  }
+  
+  &:focus {
+    outline: none;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+  }
 `;

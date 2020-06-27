@@ -5,15 +5,17 @@ export default createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    border: 0;
   }
+
   html, body, #root {
     height: 100%;
   }
-  * {
-    border: 0;
-    outline: 0;
+
+  body {
     font-family: 'Open Sans', sans-serif;
   }
+
   :root {
     --text-color: #fff;
     --primary: #36393f;
