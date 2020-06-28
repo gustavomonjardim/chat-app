@@ -1,6 +1,4 @@
-/* tslint:disable */
-/* eslint-disable */
-// this is an auto generated file. This will be overwritten
+import gql from 'graphql-tag';
 
 export const createChat = /* GraphQL */ `
   mutation CreateChat(
@@ -53,7 +51,7 @@ export const deleteChat = /* GraphQL */ `
     }
   }
 `;
-export const createMessage = /* GraphQL */ `
+export const CREATE_MESSAGE = /* GraphQL */ gql`
   mutation CreateMessage(
     $input: CreateMessageInput!
     $condition: ModelMessageConditionInput

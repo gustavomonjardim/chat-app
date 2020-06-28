@@ -381,7 +381,7 @@ export type ChatsByNameQuery = {
           chatID: string,
           createdAt: string,
           updatedAt: string,
-        }
+        }[]
       }
     } | null > | null,
     nextToken: string | null,

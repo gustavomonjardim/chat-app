@@ -1,7 +1,14 @@
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import React, { useState, useRef, useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
-import { ChatsByNameQuery, ChatsByNameQueryVariables } from '../../API';
+import {
+  ChatsByNameQuery,
+  ChatsByNameQueryVariables,
+  CreateMessageMutation,
+  CreateMessageMutationVariables,
+} from '../../API';
+import { CREATE_MESSAGE } from '../../graphql/mutations';
 import { chatsByName } from '../../graphql/queries';
 import Message from '../Message';
 
@@ -19,15 +26,16 @@ interface Props {
 }
 
 interface Message {
-  id?: string;
+  id: string;
   content: string;
   owner: string;
-  chatID?: string;
-  createdAt?: string;
+  chatID: string;
+  createdAt: string;
   updatedAt?: string;
 }
 
 const Feed: React.FC<Props> = ({ currentChat }) => {
+  const [chatID, setChatID] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const messagesRef = useRef<HTMLDivElement>(null);
@@ -37,6 +45,11 @@ const Feed: React.FC<Props> = ({ currentChat }) => {
     { variables: { name: currentChat } }
   );
 
+  const [createMessage] = useMutation<
+    CreateMessageMutation,
+    CreateMessageMutationVariables
+  >(CREATE_MESSAGE);
+
   useEffect(() => {
     setMessages([]);
   }, [currentChat]);
@@ -44,13 +57,26 @@ const Feed: React.FC<Props> = ({ currentChat }) => {
   useEffect(() => {
     if (data) {
       const chat = data.chatsByName?.items?.[0];
-      setMessages((chat?.messages?.items ?? []) as Message[]);
+      if (chat) {
+        setChatID(chat.id ?? '');
+        setMessages((chat.messages?.items ?? []) as Message[]);
+      }
     }
   }, [data]);
 
   const submit = ({ key }: React.KeyboardEvent<HTMLInputElement>) => {
     if (key === 'Enter') {
-      setMessages([...messages, { content: message, owner: 'Gustavo' }]);
+      const newMessage = {
+        id: uuidv4(),
+        content: message,
+        owner: 'Gustavo',
+        createdAt: new Date().toISOString(),
+        chatID,
+      };
+      createMessage({
+        variables: { input: newMessage },
+      });
+      setMessages([...messages, newMessage]);
       setMessage('');
     }
   };

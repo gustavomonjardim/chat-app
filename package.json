@@ -26,7 +26,8 @@
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
     "styled-components": "^5.1.1",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "uuid": "^8.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -50,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "@types/uuid": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^3.4.0",
     "@typescript-eslint/parser": "^3.4.0",
     "eslint-config-prettier": "^6.11.0",

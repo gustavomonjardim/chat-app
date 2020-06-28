@@ -5,10 +5,11 @@ type Chat @model @key(name: "byName", fields: ["name"], queryField: "chatsByName
   messages: [Message] @connection(keyName: "byChat", fields: ["id"])
 }
 
-type Message @model @key(name: "byChat", fields: ["chatID"], queryField: "messagesByChat") {
+type Message @model @key(name: "byChat", fields: ["chatID", "createdAt"], queryField: "messagesByChat") {
   id: ID!
   content: String!
   owner: String!
   chatID: ID!
   chat: Chat @connection(fields: ["chatID"])
+  createdAt: String!
 }
