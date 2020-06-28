@@ -1,6 +1,4 @@
-/* tslint:disable */
-/* eslint-disable */
-// this is an auto generated file. This will be overwritten
+import gql from 'graphql-tag';
 
 export const getChat = /* GraphQL */ `
   query GetChat($id: ID!) {
@@ -16,7 +14,7 @@ export const getChat = /* GraphQL */ `
     }
   }
 `;
-export const listChats = /* GraphQL */ `
+export const listChats = gql`
   query ListChats(
     $filter: ModelChatFilterInput
     $limit: Int
@@ -69,7 +67,7 @@ export const listMessages = /* GraphQL */ `
     }
   }
 `;
-export const chatsByName = /* GraphQL */ `
+export const chatsByName = /* GraphQL */ gql`
   query ChatsByName(
     $name: String
     $sortDirection: ModelSortDirection
@@ -89,6 +87,7 @@ export const chatsByName = /* GraphQL */ `
         name
         messages {
           items {
+            id
             content
             owner
           }

@@ -1,6 +1,7 @@
-import { API, graphqlOperation } from 'aws-amplify';
+import { useQuery } from '@apollo/react-hooks';
 import React, { useState, useEffect } from 'react';
 
+import { ListChatsQuery, ListChatsQueryVariables } from '../../API';
 import { listChats } from '../../graphql/queries';
 
 import { Container, ChatList, ChatItem, ChatLink } from './styles';
@@ -10,19 +11,24 @@ interface Props {
   updateChat: (chat: string) => void;
 }
 
+interface Chat {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const Menu: React.FC<Props> = ({ currentChat, updateChat }) => {
-  const [chats, setChats] = useState<{ id: string; name: string }[]>([]);
+  const [chats, setChats] = useState<Chat[]>([]);
+
+  const { data } = useQuery<ListChatsQuery, ListChatsQueryVariables>(listChats);
 
   useEffect(() => {
-    async function getMessages() {
-      const { data }: any = await API.graphql(graphqlOperation(listChats));
-      console.log(data);
-      setChats(data?.listChats?.items ?? []);
+    if (data) {
+      setChats((data.listChats?.items ?? []) as Chat[]);
     }
-    getMessages();
-  }, []);
-
-  console.log(chats);
+  }, [data]);
 
   return (
     <Container>

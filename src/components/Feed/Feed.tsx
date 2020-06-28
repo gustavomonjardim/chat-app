@@ -1,6 +1,7 @@
-import { API, graphqlOperation } from 'aws-amplify';
+import { useQuery } from '@apollo/react-hooks';
 import React, { useState, useRef, useEffect } from 'react';
 
+import { ChatsByNameQuery, ChatsByNameQueryVariables } from '../../API';
 import { chatsByName } from '../../graphql/queries';
 import Message from '../Message';
 
@@ -17,28 +18,35 @@ interface Props {
   currentChat: string;
 }
 
+interface Message {
+  id?: string;
+  content: string;
+  owner: string;
+  chatID?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 const Feed: React.FC<Props> = ({ currentChat }) => {
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState<
-    { content: string; owner: string }[]
-  >([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const messagesRef = useRef<HTMLDivElement>(null);
 
+  const { data } = useQuery<ChatsByNameQuery, ChatsByNameQueryVariables>(
+    chatsByName,
+    { variables: { name: currentChat } }
+  );
+
   useEffect(() => {
-    async function getMessages() {
-      const { data }: any = await API.graphql(
-        graphqlOperation(chatsByName, { name: currentChat })
-      );
-
-      const chat = data.chatsByName.items[0];
-
-      setMessages(chat.messages.items);
-
-      console.log(chat);
-    }
     setMessages([]);
-    getMessages();
   }, [currentChat]);
+
+  useEffect(() => {
+    if (data) {
+      const chat = data.chatsByName?.items?.[0];
+      setMessages((chat?.messages?.items ?? []) as Message[]);
+    }
+  }, [data]);
 
   const submit = ({ key }: React.KeyboardEvent<HTMLInputElement>) => {
     if (key === 'Enter') {
@@ -61,7 +69,7 @@ const Feed: React.FC<Props> = ({ currentChat }) => {
       </Header>
       <Messages ref={messagesRef}>
         {messages.map((message) => (
-          <Message key={message.content} text={message.content} />
+          <Message key={message.id} text={message.content} />
         ))}
       </Messages>
       <Input

@@ -373,6 +373,16 @@ export type ChatsByNameQuery = {
       description: string,
       createdAt: string,
       updatedAt: string,
+      messages: {
+        items: {
+          id: string,
+          content: string,
+          owner: string,
+          chatID: string,
+          createdAt: string,
+          updatedAt: string,
+        }
+      }
     } | null > | null,
     nextToken: string | null,
   } | null,
