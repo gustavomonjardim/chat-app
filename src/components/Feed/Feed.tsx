@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation, useSubscription } from '@apollo/react-hooks';
 import React, { useState, useRef, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -7,9 +7,11 @@ import {
   ChatsByNameQueryVariables,
   CreateMessageMutation,
   CreateMessageMutationVariables,
+  OnCreateMessageSubscription,
 } from '../../API';
 import { CREATE_MESSAGE } from '../../graphql/mutations';
 import { chatsByName } from '../../graphql/queries';
+import { onCreateMessage } from '../../graphql/subscriptions';
 import Message from '../Message';
 
 import {
@@ -23,6 +25,7 @@ import {
 
 interface Props {
   currentChat: string;
+  username: string;
 }
 
 interface Message {
@@ -34,7 +37,9 @@ interface Message {
   updatedAt?: string;
 }
 
-const Feed: React.FC<Props> = ({ currentChat }) => {
+let currentSubscriptionMessage = '';
+
+const Feed: React.FC<Props> = ({ currentChat, username }) => {
   const [chatID, setChatID] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
@@ -50,9 +55,36 @@ const Feed: React.FC<Props> = ({ currentChat }) => {
     CreateMessageMutationVariables
   >(CREATE_MESSAGE);
 
+  const { data: subscriptionData } = useSubscription<
+    OnCreateMessageSubscription
+  >(onCreateMessage);
+
   useEffect(() => {
     setMessages([]);
   }, [currentChat]);
+
+  useEffect(() => {
+    const handleNewMessage = (message: Message) => {
+      // The onCreateMessage subscription is firing twice,
+      // so this verification guarentees  that
+      // we haven't added the message to our list already
+      if (message?.id !== currentSubscriptionMessage) {
+        return;
+      }
+
+      // Ignores the message if the current user is the author
+      if (message?.owner === username) {
+        return;
+      }
+      setMessages((current) => [...current, message] as Message[]);
+    };
+
+    if (subscriptionData) {
+      const { onCreateMessage } = subscriptionData;
+      handleNewMessage(onCreateMessage as Message);
+      currentSubscriptionMessage = onCreateMessage?.id ?? '';
+    }
+  }, [subscriptionData, username]);
 
   useEffect(() => {
     if (data) {
@@ -69,7 +101,7 @@ const Feed: React.FC<Props> = ({ currentChat }) => {
       const newMessage = {
         id: uuidv4(),
         content: message,
-        owner: 'Gustavo',
+        owner: username,
         createdAt: new Date().toISOString(),
         chatID,
       };
@@ -95,7 +127,12 @@ const Feed: React.FC<Props> = ({ currentChat }) => {
       </Header>
       <Messages ref={messagesRef}>
         {messages.map((message) => (
-          <Message key={message.id} text={message.content} />
+          <Message
+            key={message.id}
+            author={message.owner}
+            date={message.createdAt}
+            text={message.content}
+          />
         ))}
       </Messages>
       <Input

@@ -12,16 +12,19 @@ import {
 
 interface Props {
   text: string;
+  author: string;
+  date: string;
 }
 
-const Message = ({ text }: Props) => {
+const Message: React.FC<Props> = ({ text, author, date }) => {
+  console.log(date);
   return (
     <Container>
       <Avatar />
       <Content>
         <Header>
-          <Author>Gustavo Monjardim</Author>
-          <Date>25/06/2020</Date>
+          <Author>{author}</Author>
+          <Date>{date}</Date>
         </Header>
         <Text>{text}</Text>
       </Content>

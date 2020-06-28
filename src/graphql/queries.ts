@@ -90,6 +90,7 @@ export const chatsByName = /* GraphQL */ gql`
             id
             content
             owner
+            createdAt
           }
         }
       }

@@ -1,6 +1,4 @@
-/* tslint:disable */
-/* eslint-disable */
-// this is an auto generated file. This will be overwritten
+import gql from 'graphql-tag';
 
 export const onCreateChat = /* GraphQL */ `
   subscription OnCreateChat {
@@ -44,20 +42,13 @@ export const onDeleteChat = /* GraphQL */ `
     }
   }
 `;
-export const onCreateMessage = /* GraphQL */ `
+export const onCreateMessage = /* GraphQL */ gql`
   subscription OnCreateMessage {
     onCreateMessage {
       id
       content
       owner
       chatID
-      chat {
-        id
-        name
-        description
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
