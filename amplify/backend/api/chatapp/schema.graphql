@@ -11,5 +11,5 @@ type Message @model @key(name: "byChat", fields: ["chatID", "createdAt"], queryF
   owner: String!
   chatID: ID!
   chat: Chat @connection(fields: ["chatID"])
-  createdAt: String!
+  createdAt:  AWSDateTime!
 }
