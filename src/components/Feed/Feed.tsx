@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useSubscription } from '@apollo/react-hooks';
+import { formatDistance } from 'date-fns';
 import React, { useState, useRef, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -130,7 +131,9 @@ const Feed: React.FC<Props> = ({ currentChat, username }) => {
           <Message
             key={message.id}
             author={message.owner}
-            date={message.createdAt}
+            date={formatDistance(new Date(message.createdAt), new Date(), {
+              addSuffix: true,
+            })}
             text={message.content}
           />
         ))}

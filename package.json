@@ -21,6 +21,7 @@
     "aws-amplify": "^3.0.18",
     "aws-appsync-auth-link": "^2.0.2",
     "aws-appsync-subscription-link": "^2.2.0",
+    "date-fns": "^2.14.0",
     "graphql-tag": "^2.10.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
